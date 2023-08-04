@@ -26,7 +26,7 @@ fn setup(mut commands: Commands) {
     commands.spawn(Camera2dBundle::default());
 }
 
-pub const PLAYER_SPEED: f32 = 200.0;
+pub const PLAYER_SPEED: f32 = 400.0;
 
 fn keyboard_input(
     keyboard_input: Res<Input<KeyCode>>,
@@ -73,7 +73,7 @@ fn load_sprite_sheet(
         SpriteSheetBundle {
             texture_atlas: texture_atlas_handle,
             sprite: TextureAtlasSprite::new(animation_indices.first),
-            transform: Transform::from_scale(Vec3::splat(2.0)),
+            transform: Transform::from_scale(Vec3::splat(4.0)),
             ..default()
         },
         animation_indices,
@@ -109,6 +109,13 @@ fn animate_sprite(
             } else {
                 sprite.index + 1
             };
+	    if keyboard_input.any_pressed([KeyCode::Left, KeyCode::A]) {
+		sprite.flip_x = true;
+		sprite.flip_y = false;
+	    } else if keyboard_input.any_pressed([KeyCode::Right, KeyCode::D]) {
+		sprite.flip_x = false;
+		sprite.flip_y = false		
+	    }
         }
     }
 }
