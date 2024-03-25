@@ -3,11 +3,12 @@ use bevy::{prelude::*, window::WindowResolution};
 mod engine;
 use engine::player::load_player_sprite_sheet;
 use engine::animation::{keyboard_input, animate_sprite};
+use bevy_rapier2d::prelude::*;
 
 fn main() {
     App::new()
         .insert_resource(ClearColor(Color::rgb(0.17, 0.6, 0.39)))
-        .add_plugins(
+        .add_plugins((
             DefaultPlugins
                 .set(ImagePlugin::default_nearest())
                 .set(WindowPlugin {
@@ -18,7 +19,9 @@ fn main() {
                     }),
                     ..default()
                 }),
-        )
+            RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0),
+            RapierDebugRenderPlugin::default(),
+        ))
         // .add_plugins(PixelCameraPlugin)
         .add_systems(Startup, setup)
         .add_systems(Startup, load_player_sprite_sheet)

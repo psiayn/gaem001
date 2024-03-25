@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use bevy_rapier2d::prelude::*;
 
 #[derive(Component)]
 pub struct Player;
@@ -32,11 +33,14 @@ pub fn load_player_sprite_sheet(
         SpriteSheetBundle {
             texture_atlas: texture_atlas_handle,
             sprite: TextureAtlasSprite::new(animation_indices.first),
-            // transform: Transform::from_scale(Vec3::splat(4.0)),
             ..default()
         },
         animation_indices,
         AnimationTimer(Timer::from_seconds(0.1, TimerMode::Repeating)),
-        Player,
-    ));
+        Player))
+        .with_children(|children| {
+            children.spawn(Collider::cuboid(8.0, 12.0))
+                .insert(TransformBundle::from(Transform::from_xyz(0.0, 0.0, 0.0)))
+                .insert(KinematicCharacterController::default());
+        });
 }
